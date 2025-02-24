@@ -38,7 +38,7 @@
             font-family: 'Arial', sans-serif;
         }
 
-        .navbar {
+        /*.navbar {
             background-color: var(--nav-bg);
             padding: 1rem;
             box-shadow: var(--box-shadow);
@@ -68,6 +68,63 @@
         .nav-link:hover {
             background-color: var(--card-bg);
         }
+        */
+		.navbar {
+            position: relative;
+            padding: 1rem;
+            background-color: var(--nav-bg);
+            box-shadow: var(--box-shadow);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links.active {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--nav-bg);
+            padding: 1rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .nav-link {
+            padding: 0.75rem;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+        }
+
+
+        /**/
 
         .theme-toggle {
             position: fixed;
@@ -199,6 +256,7 @@
     <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
     
     <nav class="navbar">
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
         <ul class="nav-links">
             <li class="nav-link" onclick="showSubject('ict')">ICT</li>
             <li class="nav-link" onclick="showSubject('physics1')">Physics 1st</li>
@@ -324,6 +382,21 @@
     </div>
 
     <script>
+
+
+        // Add this function
+        function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-links').classList.remove('active');
+            });
+        });
+        // এর আগে অ্যাড করা হইসে
         // Theme Management
         function toggleTheme() {
             const body = document.body;
