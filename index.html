@@ -10,6 +10,12 @@
             --text-color: #333333;
             --nav-bg: #f8f9fa;
             --card-bg: #f1f1f1;
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --danger-color: #dc3545;
+            --danger-hover: #a71d2a;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         [data-theme="dark"] {
@@ -17,6 +23,10 @@
             --text-color: #ffffff;
             --nav-bg: #1a1a1a;
             --card-bg: #3d3d3d;
+            --primary-color: #1a73e8;
+            --primary-hover: #1557b0;
+            --danger-color: #e53935;
+            --danger-hover: #b71c1c;
         }
 
         body {
@@ -25,12 +35,16 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             transition: all 0.3s ease;
+            font-family: 'Arial', sans-serif;
         }
 
         .navbar {
             background-color: var(--nav-bg);
             padding: 1rem;
-            overflow-x: auto;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .nav-links {
@@ -39,12 +53,16 @@
             list-style: none;
             padding: 0;
             margin: 0;
+            overflow-x: auto;
         }
 
         .nav-link {
             cursor: pointer;
             padding: 0.5rem 1rem;
-            border-radius: 5px;
+            border-radius: var(--border-radius);
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+            color: var(--text-color);
         }
 
         .nav-link:hover {
@@ -57,6 +75,16 @@
             right: 1rem;
             padding: 0.5rem 1rem;
             cursor: pointer;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--primary-hover);
         }
 
         .container {
@@ -75,19 +103,61 @@
 
         .video-card {
             background-color: var(--card-bg);
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 5px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
         }
 
         .video-form {
             margin-bottom: 2rem;
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
         }
 
         .form-input {
             width: 100%;
-            padding: 0.5rem;
+            padding: 0.75rem;
             margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: var(--danger-hover);
         }
 
         .video-container {
@@ -95,6 +165,8 @@
             width: 100%;
             padding-top: 56.25%; /* 16:9 Aspect Ratio */
             margin: 1rem 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
         }
 
         .video-container iframe {
@@ -145,8 +217,8 @@
             <div class="video-form">
                 <input type="text" class="form-input" id="ictTitle" placeholder="Video Title">
                 <input type="url" class="form-input" id="ictUrl" placeholder="YouTube Video URL">
-                <button onclick="addVideo('ict')">Add Video</button>
-                <button onclick="updateVideo('ict')" style="display: none;" id="ictUpdateBtn">Update Video</button>
+                <button class="btn btn-primary" onclick="addVideo('ict')">Add Video</button>
+                <button class="btn btn-primary" onclick="updateVideo('ict')" style="display: none;" id="ictUpdateBtn">Update Video</button>
             </div>
             <div id="ictVideos"></div>
         </div>
@@ -157,8 +229,8 @@
             <div class="video-form">
                 <input type="text" class="form-input" id="physics1Title" placeholder="Video Title">
                 <input type="url" class="form-input" id="physics1Url" placeholder="YouTube Video URL">
-                <button onclick="addVideo('physics1')">Add Video</button>
-                <button onclick="updateVideo('physics1')" style="display: none;" id="physics1UpdateBtn">Update Video</button>
+                <button class="btn btn-primary" onclick="addVideo('physics1')">Add Video</button>
+                <button class="btn btn-primary" onclick="updateVideo('physics1')" style="display: none;" id="physics1UpdateBtn">Update Video</button>
             </div>
             <div id="physics1Videos"></div>
         </div>
@@ -169,8 +241,8 @@
             <div class="video-form">
                 <input type="text" class="form-input" id="physics2Title" placeholder="Video Title">
                 <input type="url" class="form-input" id="physics2Url" placeholder="YouTube Video URL">
-                <button onclick="addVideo('physics2')">Add Video</button>
-                <button onclick="updateVideo('physics2')" style="display: none;" id="physics2UpdateBtn">Update Video</button>
+                <button class="btn btn-primary" onclick="addVideo('physics2')">Add Video</button>
+                <button class="btn btn-primary" onclick="updateVideo('physics2')" style="display: none;" id="physics2UpdateBtn">Update Video</button>
             </div>
             <div id="physics2Videos"></div>
         </div>
@@ -181,8 +253,8 @@
             <div class="video-form">
                 <input type="text" class="form-input" id="biology1Title" placeholder="Video Title">
                 <input type="url" class="form-input" id="biology1Url" placeholder="YouTube Video URL">
-                <button onclick="addVideo('biology1')">Add Video</button>
-                <button onclick="updateVideo('biology1')" style="display: none;" id="biology1UpdateBtn">Update Video</button>
+                <button class="btn btn-primary" onclick="addVideo('biology1')">Add Video</button>
+                <button class="btn btn-primary" onclick="updateVideo('biology1')" style="display: none;" id="biology1UpdateBtn">Update Video</button>
             </div>
             <div id="biology1Videos"></div>
         </div>
@@ -193,8 +265,8 @@
             <div class="video-form">
                 <input type="text" class="form-input" id="biology2Title" placeholder="Video Title">
                 <input type="url" class="form-input" id="biology2Url" placeholder="YouTube Video URL">
-                <button onclick="addVideo('biology2')">Add Video</button>
-                <button onclick="updateVideo('biology2')" style="display: none;" id="biology2UpdateBtn">Update Video</button>
+                <button class="btn btn-primary" onclick="addVideo('biology2')">Add Video</button>
+                <button class="btn btn-primary" onclick="updateVideo('biology2')" style="display: none;" id="biology2UpdateBtn">Update Video</button>
             </div>
             <div id="biology2Videos"></div>
         </div>
@@ -205,8 +277,8 @@
             <div class="video-form">
                 <input type="text" class="form-input" id="chemistry1Title" placeholder="Video Title">
                 <input type="url" class="form-input" id="chemistry1Url" placeholder="YouTube Video URL">
-                <button onclick="addVideo('chemistry1')">Add Video</button>
-                <button onclick="updateVideo('chemistry1')" style="display: none;" id="chemistry1UpdateBtn">Update Video</button>
+                <button class="btn btn-primary" onclick="addVideo('chemistry1')">Add Video</button>
+                <button class="btn btn-primary" onclick="updateVideo('chemistry1')" style="display: none;" id="chemistry1UpdateBtn">Update Video</button>
             </div>
             <div id="chemistry1Videos"></div>
         </div>
@@ -217,8 +289,8 @@
             <div class="video-form">
                 <input type="text" class="form-input" id="chemistry2Title" placeholder="Video Title">
                 <input type="url" class="form-input" id="chemistry2Url" placeholder="YouTube Video URL">
-                <button onclick="addVideo('chemistry2')">Add Video</button>
-                <button onclick="updateVideo('chemistry2')" style="display: none;" id="chemistry2UpdateBtn">Update Video</button>
+                <button class="btn btn-primary" onclick="addVideo('chemistry2')">Add Video</button>
+                <button class="btn btn-primary" onclick="updateVideo('chemistry2')" style="display: none;" id="chemistry2UpdateBtn">Update Video</button>
             </div>
             <div id="chemistry2Videos"></div>
         </div>
@@ -229,8 +301,8 @@
             <div class="video-form">
                 <input type="text" class="form-input" id="math1Title" placeholder="Video Title">
                 <input type="url" class="form-input" id="math1Url" placeholder="YouTube Video URL">
-                <button onclick="addVideo('math1')">Add Video</button>
-                <button onclick="updateVideo('math1')" style="display: none;" id="math1UpdateBtn">Update Video</button>
+                <button class="btn btn-primary" onclick="addVideo('math1')">Add Video</button>
+                <button class="btn btn-primary" onclick="updateVideo('math1')" style="display: none;" id="math1UpdateBtn">Update Video</button>
             </div>
             <div id="math1Videos"></div>
         </div>
@@ -241,8 +313,8 @@
             <div class="video-form">
                 <input type="text" class="form-input" id="math2Title" placeholder="Video Title">
                 <input type="url" class="form-input" id="math2Url" placeholder="YouTube Video URL">
-                <button onclick="addVideo('math2')">Add Video</button>
-                <button onclick="updateVideo('math2')" style="display: none;" id="math2UpdateBtn">Update Video</button>
+                <button class="btn btn-primary" onclick="addVideo('math2')">Add Video</button>
+                <button class="btn btn-primary" onclick="updateVideo('math2')" style="display: none;" id="math2UpdateBtn">Update Video</button>
             </div>
             <div id="math2Videos"></div>
         </div>
@@ -306,8 +378,8 @@
                                 allowfullscreen>
                         </iframe>
                     </div>
-                    <button onclick="editVideo('${subject}', ${video.id})">Edit</button>
-                    <button onclick="deleteVideo('${subject}', ${video.id})">Delete</button>
+                    <button class="btn btn-primary" onclick="editVideo('${subject}', ${video.id})">Edit</button>
+                    <button class="btn btn-danger" onclick="deleteVideo('${subject}', ${video.id})">Delete</button>
                 </div>
             `).join('');
         }
@@ -360,9 +432,3 @@
         function showSubject(subject) {
             document.querySelectorAll('.subject-section').forEach(div => {
                 div.classList.remove('active-subject');
-            });
-            document.getElementById(subject).classList.add('active-subject');
-        }
-    </script>
-</body>
-</html>
