@@ -319,8 +319,7 @@
             <div id="math2Videos"></div>
         </div>
     </div>
-
-    <script>
+<script>
         // Theme Management
         function toggleTheme() {
             const body = document.body;
@@ -362,6 +361,8 @@
                 localStorage.setItem(subject, JSON.stringify(videos));
                 loadVideos(subject);
                 clearForm(subject);
+            } else {
+                alert("Please fill in both the title and URL fields.");
             }
         }
 
@@ -432,9 +433,9 @@
         function showSubject(subject) {
             document.querySelectorAll('.subject-section').forEach(div => {
                 div.classList.remove('active-subject');
+            });
+            document.getElementById(subject).classList.add('active-subject');
         }
-                                                                  }
     </script>
 </body>
 </html>
-                
