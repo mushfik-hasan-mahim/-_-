@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Video Resources</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --nav-bg: #f8f9fa;
+            --card-bg: #f1f1f1;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #2d2d2d;
+            --text-color: #ffffff;
+            --nav-bg: #1a1a1a;
+            --card-bg: #3d3d3d;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .navbar {
+            background-color: var(--nav-bg);
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-link {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .nav-link:hover {
+            background-color: var(--card-bg);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .subject-section {
+            display: none;
+        }
+
+        .active-subject {
+            display: block;
+        }
+
+        .video-card {
+            background-color: var(--card-bg);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+
+        .video-form {
+            margin-bottom: 2rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            margin: 1rem 0;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                gap: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li class="nav-link" onclick="showSubject('ict')">ICT</li>
+            <li class="nav-link" onclick="showSubject('physics1')">Physics 1st</li>
+            <li class="nav-link" onclick="showSubject('physics2')">Physics 2nd</li>
+            <li class="nav-link" onclick="showSubject('biology1')">Biology 1st</li>
+            <li class="nav-link" onclick="showSubject('biology2')">Biology 2nd</li>
+            <li class="nav-link" onclick="showSubject('chemistry1')">Chemistry 1st</li>
+            <li class="nav-link" onclick="showSubject('chemistry2')">Chemistry 2nd</li>
+            <li class="nav-link" onclick="showSubject('math1')">Math 1st</li>
+            <li class="nav-link" onclick="showSubject('math2')">Math 2nd</li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- ICT Section -->
+        <div id="ict" class="subject-section">
+            <h2>ICT Video Resources</h2>
+            <div class="video-form">
+                <input type="text" class="form-input" id="ictTitle" placeholder="Video Title">
+                <input type="url" class="form-input" id="ictUrl" placeholder="YouTube Video URL">
+                <button onclick="addVideo('ict')">Add Video</button>
+                <button onclick="updateVideo('ict')" style="display: none;" id="ictUpdateBtn">Update Video</button>
+            </div>
+            <div id="ictVideos"></div>
+        </div>
+
+        <!-- Repeat similar sections for other subjects -->
+        <!-- Add remaining 8 subjects sections following same pattern -->
+    </div>
+
+    <script>
+        // Theme Management
+        function toggleTheme() {
+            const body = document.body;
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme
+        window.addEventListener('load', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            
+            // Initialize all subjects
+            const subjects = ['ict', 'physics1', 'physics2', 'biology1', 'biology2', 
+                            'chemistry1', 'chemistry2', 'math1', 'math2'];
+            subjects.forEach(sub => {
+                if (!localStorage.getItem(sub)) {
+                    localStorage.setItem(sub, JSON.stringify([]));
+                }
+                loadVideos(sub);
+            });
+            
+            showSubject('ict'); // Show default subject
+        });
+
+        // Video CRUD Operations
+        function addVideo(subject) {
+            const title = document.getElementById(`${subject}Title`).value;
+            const url = document.getElementById(`${subject}Url`).value;
+            
+            if (title && url) {
+                const videos = JSON.parse(localStorage.getItem(subject));
+                videos.push({ id: Date.now(), title, url });
+                localStorage.setItem(subject, JSON.stringify(videos));
+                loadVideos(subject);
+                clearForm(subject);
+            }
+        }
+
+        function loadVideos(subject) {
+            const container = document.getElementById(`${subject}Videos`);
+            const videos = JSON.parse(localStorage.getItem(subject));
+            
+            container.innerHTML = videos.map(video => `
+                <div class="video-card" id="${video.id}">
+                    <h3>${video.title}</h3>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/${getYouTubeId(video.url)}" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                    <button onclick="editVideo('${subject}', ${video.id})">Edit</button>
+                    <button onclick="deleteVideo('${subject}', ${video.id})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function getYouTubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        function deleteVideo(subject, id) {
+            let videos = JSON.parse(localStorage.getItem(subject));
+            videos = videos.filter(video => video.id !== id);
+            localStorage.setItem(subject, JSON.stringify(videos));
+            loadVideos(subject);
+        }
+
+        function editVideo(subject, id) {
+            const videos = JSON.parse(localStorage.getItem(subject));
+            const video = videos.find(v => v.id === id);
+            
+            document.getElementById(`${subject}Title`).value = video.title;
+            document.getElementById(`${subject}Url`).value = video.url;
+            document.getElementById(`${subject}UpdateBtn`).style.display = 'inline-block';
+            document.getElementById(`${subject}UpdateBtn`).dataset.id = id;
+        }
+
+        function updateVideo(subject) {
+            const id = document.getElementById(`${subject}UpdateBtn`).dataset.id;
+            const title = document.getElementById(`${subject}Title`).value;
+            const url = document.getElementById(`${subject}Url`).value;
+            
+            let videos = JSON.parse(localStorage.getItem(subject));
+            videos = videos.map(video => 
+                video.id == id ? { id, title, url } : video
+            );
+            
+            localStorage.setItem(subject, JSON.stringify(videos));
+            loadVideos(subject);
+            clearForm(subject);
+        }
+
+        function clearForm(subject) {
+            document.getElementById(`${subject}Title`).value = '';
+            document.getElementById(`${subject}Url`).value = '';
+            document.getElementById(`${subject}UpdateBtn`).style.display = 'none';
+        }
+
+        // Subject Navigation
+        function showSubject(subject) {
+            document.querySelectorAll('.subject-section').forEach(div => {
+                div.classList.remove('active-subject');
+            });
+            document.getElementById(subject).classList.add('active-subject');
+        }
+    </script>
+</body>
+</html>
